@@ -8,32 +8,37 @@ struct ContentView: View {
     @AppStorage("tab") var tab = ContentTab.welcome
     @AppStorage("name") var welcomeName = "Skipper"
     @AppStorage("appearance") var appearance = ""
+    @AppStorage("isLoggedIn") var isLoggedIn = false
     @State var viewModel = ViewModel()
 
     var body: some View {
-        TabView(selection: $tab) {
-            NavigationStack {
-                WelcomeView(welcomeName: $welcomeName)
-            }
-            .tabItem { Label("Welcome", systemImage: "heart.fill") }
-            .tag(ContentTab.welcome)
+        if isLoggedIn {
+            TabView(selection: $tab) {
+                NavigationStack {
+                    HomeScreen()
+                }
+                .tabItem { Label("Home", systemImage: "house.fill") }
+                .tag(ContentTab.home)
 
-            NavigationStack {
-                ItemListView()
-                    .navigationTitle(Text("\(viewModel.items.count) Items"))
-            }
-            .tabItem { Label("Home", systemImage: "house.fill") }
-            .tag(ContentTab.home)
+                NavigationStack {
+                    ItemListView()
+                        .navigationTitle(Text("\(viewModel.items.count) Items"))
+                }
+                .tabItem { Label("Items", systemImage: "list.bullet") }
+                .tag(ContentTab.welcome)
 
-            NavigationStack {
-                SettingsView(appearance: $appearance, welcomeName: $welcomeName)
-                    .navigationTitle("Settings")
+                NavigationStack {
+                    SettingsView(appearance: $appearance, welcomeName: $welcomeName)
+                        .navigationTitle("Settings")
+                }
+                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+                .tag(ContentTab.settings)
             }
-            .tabItem { Label("Settings", systemImage: "gearshape.fill") }
-            .tag(ContentTab.settings)
+            .environment(viewModel)
+            .preferredColorScheme(appearance == "dark" ? .dark : appearance == "light" ? .light : nil)
+        } else {
+            LoginScreen()
         }
-        .environment(viewModel)
-        .preferredColorScheme(appearance == "dark" ? .dark : appearance == "light" ? .light : nil)
     }
 }
 
