@@ -12,6 +12,7 @@ struct TheatreListScreen: View {
         Theatre(name: "Test", location: "abc"),
         Theatre(name: "theatre", location: "Payyanur")
     ]
+    @State private var showSettings: Bool = false
     
     var body: some View {
         ZStack {
@@ -31,7 +32,7 @@ struct TheatreListScreen: View {
                         
                         Spacer()
                         Button(action: {
-                            print("Settings tapped")
+                            showSettings = true
                         }) {
                             Image(systemName: "gearshape.fill")
                                 .font(.system(size: 20))
@@ -84,6 +85,9 @@ struct TheatreListScreen: View {
             }
         }
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showSettings) {
+            SettingsScreen()
+        }
     }
     
     private func addNewTheatre() {

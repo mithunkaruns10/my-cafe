@@ -91,7 +91,7 @@ struct HomeScreen: View {
                     handleRoleSelection(role)
                 }
             }
-            .fullScreenCover(isPresented: $isLoginScreenPresented) {
+            .sheet(isPresented: $isLoginScreenPresented) {
                 LoginScreen(navigateToTheatreList: {
                     isLoginScreenPresented = false
                     navigateToTheatreList = true

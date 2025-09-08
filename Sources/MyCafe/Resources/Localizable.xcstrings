@@ -462,7 +462,6 @@
     },
     "Settings" : {
       "comment" : "Tab bar item title for the Settings tab",
-      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
