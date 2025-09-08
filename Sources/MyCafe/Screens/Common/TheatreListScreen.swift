@@ -83,6 +83,7 @@ struct TheatreListScreen: View {
                 }
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
     }
     
     private func addNewTheatre() {

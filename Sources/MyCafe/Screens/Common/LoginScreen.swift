@@ -8,19 +8,44 @@
 import SwiftUI
 
 struct LoginScreen: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var isLoading: Bool = false
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     
+    let navigateToTheatreList: @Sendable @MainActor () -> Void
+    
+    init(navigateToTheatreList: @escaping @Sendable @MainActor () -> Void) {
+        self.navigateToTheatreList = navigateToTheatreList
+    }
+    
     var body: some View {
         ZStack {
             // Background
             AppColors.primary
                 .ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
+                // X button
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 20, weight: AppFontWeights.semibold))
+                            .foregroundColor(AppColors.textWhite)
+                            .frame(width: 40, height: 40)
+                            .background(AppColors.primary.opacity(0.2))
+                            .cornerRadius(AppCornerRadius.medium)
+                    }
+                    .padding(.top, AppSpacing.lg)
+                    .padding(.leading, AppSpacing.lg)
+                    
+                    Spacer()
+                }
+                
                 Spacer()
                 
                 // Login card
@@ -88,7 +113,9 @@ struct LoginScreen: View {
                     // Login button
                     VStack(spacing: AppSpacing.lg) {
                         Button(action: {
-                            handleLogin()
+                            dismiss()
+                            navigateToTheatreList()
+                            //handleLogin()
                         }) {
                             Text(isLoading ? "Logging in..." : "Login")
                                 .font(.system(size: AppFontSizes.buttonText, weight: AppFontWeights.semibold))
@@ -98,7 +125,7 @@ struct LoginScreen: View {
                                 .background(email.isEmpty || password.isEmpty ? AppColors.buttonSecondary : AppColors.buttonPrimary)
                                 .cornerRadius(AppCornerRadius.large)
                         }
-                        .disabled(email.isEmpty || password.isEmpty || isLoading)
+//                        .disabled(email.isEmpty || password.isEmpty || isLoading)
                     }
                     .padding(.horizontal, AppSpacing.xl)
                     .padding(.bottom, AppSpacing.xl)
@@ -154,5 +181,5 @@ struct LoginScreen: View {
 }
 
 #Preview {
-    LoginScreen()
+    LoginScreen(navigateToTheatreList: { })
 }

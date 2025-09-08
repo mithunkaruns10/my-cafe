@@ -10,12 +10,14 @@ import SwiftUI
 struct HomeScreen: View {
     @State private var selectedRole: UserRole?
     @State private var isLoginScreenPresented: Bool = false
+    @State private var navigateToTheatreList: Bool = false
     
     var body: some View {
-        ZStack {
-            // Background
-            AppColors.primary
-                .ignoresSafeArea()
+        NavigationStack {
+            ZStack {
+                // Background
+                AppColors.primary
+                    .ignoresSafeArea() 
             
             VStack(spacing: 0) {
                 Spacer()
@@ -83,14 +85,21 @@ struct HomeScreen: View {
                 
                 Spacer()
             }
-        }
-        .onChange(of: selectedRole) { _, newRole in
-            if let role = newRole {
-                handleRoleSelection(role)
             }
-        }
-        .fullScreenCover(isPresented: $isLoginScreenPresented) {
-            LoginScreen()
+            .onChange(of: selectedRole) { _, newRole in
+                if let role = newRole {
+                    handleRoleSelection(role)
+                }
+            }
+            .fullScreenCover(isPresented: $isLoginScreenPresented) {
+                LoginScreen(navigateToTheatreList: {
+                    isLoginScreenPresented = false
+                    navigateToTheatreList = true
+                })
+            }
+            .navigationDestination(isPresented: $navigateToTheatreList) {
+                TheatreListScreen()
+            }
         }
     }
     
